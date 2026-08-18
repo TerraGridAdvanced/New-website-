@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TerraGrid — Spatial Agriculture Intelligence</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<!-- ===== FIRST-LAUNCH ONBOARDING ===== -->
+<div class="onboarding" id="onboarding">
+  <div class="onboarding-bg"></div>
+  <div class="onboarding-card">
+    <div class="onboarding-brand">
+      <div class="brand-mark">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="brand-text">
+        <div class="brand-name">TerraGrid</div>
+        <div class="brand-tag">Spatial Agriculture Intelligence</div>
+      </div>
+    </div>
+    <h1 class="onboarding-title">Do you have an AgriBot?</h1>
+    <p class="onboarding-text">TerraGrid uses an AgriBot rover to visit GPS sampling points and collect soil measurements from the field.</p>
+    <div class="onboarding-actions">
+      <button class="primary-btn onboarding-yes" id="hasAgriBotBtn">I HAVE AN AGRIBOT</button>
+      <button class="secondary-btn onboarding-no" id="noAgriBotBtn">I DON'T HAVE AN AGRIBOT</button>
+    </div>
+    <button class="text-btn reset-choice-btn" id="resetChoiceBtn" type="button">Reset choice (testing)</button>
+  </div>
+</div>
+
+<!-- ===== BUY ONE ASAP MODAL ===== -->
+<div class="buy-modal" id="buyModal" hidden>
+  <div class="buy-modal-backdrop"></div>
+  <div class="buy-modal-card">
+    <div class="buy-modal-icon">
+      <i data-lucide="bot"></i>
+    </div>
+    <h2>AGRI-ROVER REQUIRED</h2>
+    <p class="buy-modal-lead"></p>
+    <p>TerraGrid's automatic soil-sampling workflow requires an AgriBot rover to collect field measurements. The rover visits generated GPS waypoints, samples soil, and returns results to TerraGrid.</p>
+    <div class="buy-modal-actions">
+      <button class="secondary-btn" id="buyBackBtn">BACK</button>
+      <button class="primary-btn" id="exploreAnywayBtn">EXPLORE TERRAGRID ANYWAY</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="app-shell" id="appShell" hidden>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark"><span></span><span></span><span></span><span></span></div>
+    <div class="brand-copy">
+      <div class="brand-name">TerraGrid</div>
+      <div class="brand-sub">Spatial Agriculture Intelligence</div>
+    </div>
+  </div>
+  <div class="top-status">
+    <span class="top-live-dot"></span><span id="topMissionStatus">Region intelligence</span>
+  </div>
+  <div class="top-actions">
+    <div class="status-pill" id="gpsStatus"><i></i><span>GPS not connected</span></div>
+    <button class="secondary-btn locate-btn" id="locateBtn"><i data-lucide="navigation"></i><span>Locate me</span></button>
+    <button class="icon-btn" id="darkModeBtn" type="button" title="Toggle dark mode" aria-label="Toggle dark mode"><i data-lucide="moon" id="darkModeIcon"></i></button>
+  </div>
+</header>
+
+<div class="app-body">
+  <nav class="side-nav" aria-label="TerraGrid sections">
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav-item active" data-page="regionPage"><i data-lucide="scan-search"></i><span>Region Intelligence</span></button>
+    <button class="nav-item" data-page="fieldPage"><i data-lucide="map"></i><span>Field Mapper</span></button>
+    <button class="nav-item" data-page="roverPage"><i data-lucide="bot"></i><span>Rover Mission</span></button>
+    <button class="nav-item" data-page="soilPage"><i data-lucide="layers-3"></i><span>Soil Results</span></button>
+    <button class="nav-item" data-page="guidePage"><i data-lucide="book-open"></i><span>How It Works</span></button>
+    <div class="nav-spacer"></div>
+    <div class="nav-foot"><span class="nav-foot-dot"></span><span>LOCAL MISSION CONTROL</span></div>
+  </nav>
+
+  <main class="page-area">
+
+    <!-- REGION INTELLIGENCE -->
+    <section class="app-page active" id="regionPage">
+      <div class="page-heading">
+        <div><span class="section-kicker">LIVE LOCATION ANALYSIS</span><h1>Know the ground<br><em>before the rover moves.</em></h1><p>TerraGrid reads your live location, current weather and modeled soil conditions to estimate whether the area is suitable for rover sampling.</p></div>
+        <button class="primary-btn large-cta" id="regionLocateBtn"><i data-lucide="crosshair"></i> ANALYZE MY LOCATION</button>
+      </div>
+
+      <div class="region-grid">
+        <div class="region-hero">
+          <div class="region-map-mini" id="regionMiniMap">
+            <div class="mini-map-grid"></div>
+            <div class="mini-cross"><span></span></div>
+            <div class="mini-map-label">LIVE REGION</div>
+          </div>
+          <div class="region-coords">
+            <div><span>LATITUDE</span><strong id="regionLat">—</strong></div>
+            <div><span>LONGITUDE</span><strong id="regionLon">—</strong></div>
+            <div><span>REGION</span><strong id="regionName">Waiting for location</strong></div>
+          </div>
+        </div>
+
+        <div class="intelligence-card">
+          <div class="intel-head"><div><span class="section-kicker">TERRAGRID INTELLIGENCE</span><h2>Regional assessment</h2></div><span class="intel-state" id="intelState">NOT ANALYZED</span></div>
+          <p id="intelSummary">Tap “Analyze my location” to build a location-specific weather, soil and rover assessment.</p>
+          <div class="intel-score"><div><span>ROVER MOBILITY</span><strong id="roverScore">—</strong></div><div class="score-bar"><i id="roverScoreBar"></i></div></div>
+          <div class="intel-grid">
+            <div class="intel-metric"><span>SOIL MOISTURE</span><strong id="intelSoilMoisture">—</strong><small>modeled surface layer</small></div>
+            <div class="intel-metric"><span>WEATHER</span><strong id="intelWeather">—</strong><small id="intelWeatherDetail">current conditions</small></div>
+            <div class="intel-metric"><span>WIND</span><strong id="intelWind">—</strong><small>10 m</small></div>
+            <div class="intel-metric"><span>PRECIPITATION</span><strong id="intelRain">—</strong><small>current / forecast</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-row">
+        <div class="section-title"><span class="section-kicker">FIELD CONDITIONS</span><h2>What the rover should expect</h2></div>
+      </div>
+      <div class="condition-grid">
+        <article class="condition-card"><div class="condition-icon"><i data-lucide="cloud-sun"></i></div><span>WEATHER</span><strong id="weatherCardValue">Waiting</strong><p id="weatherCardText">Live weather will appear after location analysis.</p></article>
+        <article class="condition-card"><div class="condition-icon"><i data-lucide="droplets"></i></div><span>SOIL STATE</span><strong id="soilCardValue">Waiting</strong><p id="soilCardText">Modeled soil moisture helps estimate ground conditions.</p></article>
+        <article class="condition-card"><div class="condition-icon"><i data-lucide="bot"></i></div><span>ROVER ADVICE</span><strong id="roverAdviceValue">Waiting</strong><p id="roverAdviceText">TerraGrid will flag conditions that may make rover travel difficult.</p></article>
+      </div>
+      <div class="data-note"><i data-lucide="info"></i><span>Regional weather and modeled soil variables are environmental guidance, not a substitute for field measurements. The rover's own sensors remain the final authority.</span></div>
+    </section>
+
+    <!-- FIELD MAPPER -->
+    <section class="app-page" id="fieldPage">
+      <div class="page-heading compact"><div><span class="section-kicker">SPATIAL MAPPING</span><h1>Map your field.</h1><p>Draw the boundary and TerraGrid will create an adaptive set of GPS sampling points.</p></div><div class="page-actions"><button class="secondary-btn" id="fieldLocateBtn"><i data-lucide="navigation"></i> Locate me</button><button class="primary-btn" id="drawBoundaryBtn"><i data-lucide="pentagon"></i> Draw field</button><button class="primary-btn finish-boundary-btn" id="finishBoundaryBtn" disabled><i data-lucide="check"></i> Finish boundary</button><button class="secondary-btn" id="cancelBoundaryBtn" hidden>Cancel</button><button class="secondary-btn" id="clearBtn">Clear</button></div></div>
+      <div class="mapper-layout">
+        <div class="map-panel"><div id="map"></div><div class="map-badge"><i data-lucide="map"></i> SATELLITE FIELD VIEW</div><div class="map-hint"><strong>FIELD MAPPING</strong><span>Draw a polygon around the area you want the rover to sample.</span></div><div class="map-legend"><div><span class="legend-swatch rover"></span> Live position</div><div><span class="legend-swatch sample"></span> Sample point</div><div><span class="legend-swatch boundary"></span> Boundary</div></div></div>
+        <aside class="field-sidebar">
+          <section class="card"><div class="card-head"><div><span class="section-kicker">FIELD OVERVIEW</span><h2>Sampling plan</h2></div><span class="status-tag" id="fieldStatusTag">WAITING</span></div><div class="stat-grid"><div class="stat-cell"><span>AREA</span><strong id="areaValue">—</strong></div><div class="stat-cell"><span>POINTS</span><strong id="heroPointCount">0</strong></div><div class="stat-cell"><span>DENSITY</span><strong id="gridBadge">ADAPTIVE</strong></div><div class="stat-cell"><span>VERTICES</span><strong id="vertexCount">—</strong></div></div><p class="muted" id="boundaryText">No boundary selected yet.</p><div class="density-strip" id="densityStrip"><div class="density-icon"><i data-lucide="activity"></i></div><div><strong id="densityTitle">Awaiting field</strong><span id="densityText">Draw a boundary to calculate sampling density.</span></div></div></section>
+          <section class="card"><div class="card-head"><div><span class="section-kicker">WAYPOINTS</span><h2>Adaptive coordinates</h2></div></div><p class="muted">The number of points changes with field size. These coordinates are the exact waypoints sent to the rover.</p><div class="points-table-wrap"><table><thead><tr><th>Point</th><th>Latitude</th><th>Longitude</th></tr></thead><tbody id="pointsBody"><tr><td colspan="3" class="empty-row">Draw a boundary to generate points.</td></tr></tbody></table></div></section>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ROVER -->
+    <section class="app-page" id="roverPage">
+      <div class="page-heading"><div><span class="section-kicker">AUTONOMOUS OPERATIONS</span><h1>Send the rover<br><em>into the field.</em></h1><p>Connect the ESP32, verify the link, then dispatch the generated waypoint mission.</p></div></div>
+      <div class="rover-grid">
+        <section class="rover-status-card"><div class="rover-visual"><div class="rover-ring"><i data-lucide="bot"></i></div><span class="rover-pulse"></span></div><span class="section-kicker">AGRIBOT STATUS</span><h2 id="roverPageStatus">Waiting for mission</h2><p id="roverPageText">Create a field mission first, then connect your rover.</p><div class="rover-big-status"><span id="roverDot"></span><strong id="endpointStatus">ROVER DISCONNECTED</strong></div><div class="mission-state" id="missionState">MISSION PLANNER READY</div></section>
+        <section class="card rover-config-card"><span class="section-kicker">ESP32 CONNECTION</span><h2>Rover endpoint</h2><label class="field-label" for="roverUrl">Mission endpoint</label><div class="input-row"><input id="roverUrl" value="http://192.168.4.1/mission" spellcheck="false"><button class="secondary-btn small-btn" id="testBtn">Test connection</button><button class="secondary-btn small-btn" id="getRoverGpsBtn">Get rover GPS</button></div><p class="muted">Rover start position: <strong id="roverGpsValue">Not received</strong><br>Use the IP address shown by the ESP32 Serial Monitor. The rover and this device must be able to reach each other.</p><button class="primary-btn dispatch-btn" id="sendBtn" disabled><i data-lucide="send"></i><span>Send coordinates</span></button>
+<button class="primary-btn dispatch-btn start-btn" id="startBtn" disabled><i data-lucide="play"></i><span>Start AgriBot</span></button>
+<details class="esp32-guide"><summary><i data-lucide="book-open"></i> ESP32 CONNECTION GUIDE</summary><div class="guide-body"><div class="guide-step"><span class="guide-num">01</span><div><strong>Connect ESP32</strong><p>Connect the rover to Wi-Fi or its access point.</p></div></div><div class="guide-step"><span class="guide-num">02</span><div><strong>Find IP address</strong><p>Check the Serial Monitor. Example: <code>192.168.4.1</code></p></div></div><div class="guide-step"><span class="guide-num">03</span><div><strong>Enter endpoint</strong><p>Example: <code>http://192.168.4.1/mission</code></p></div></div><div class="guide-step"><span class="guide-num">04</span><div><strong>Test connection</strong><p>Click Test connection before dispatch.</p></div></div><div class="guide-step"><span class="guide-num">05</span><div><strong>Send mission</strong><p>The rover receives the generated latitude/longitude waypoints.</p></div></div></div></details></section>
+      </div>
+    </section>
+
+    <!-- SOIL RESULTS -->
+    <section class="app-page" id="soilPage">
+      <div class="page-heading"><div><span class="section-kicker">POST-MISSION ANALYSIS</span><h1>Read what the rover<br><em>found underground.</em></h1><p>Bring the rover back, load its measurements and inspect each sampling location.</p></div><div class="page-actions"><button class="secondary-btn results-btn" id="getResultsBtn"><i data-lucide="download"></i> Get rover results</button><label class="secondary-btn results-btn import-label"><i data-lucide="upload"></i> Import results JSON<input type="file" id="importResultsInput" accept=".json,application/json" hidden></label></div></div>
+      <section class="card soil-results-card" id="soilResultsCard"><div class="results-status" id="resultsStatus">No soil data yet. Send the rover on a mission and return here to view measurements.</div><div class="results-summary"><div><span>SAMPLES RECEIVED</span><strong id="soilSampleCount">0</strong></div><div><span>MISSION</span><strong id="soilMissionId">—</strong></div><div><span>STATUS</span><strong id="soilResultState">WAITING</strong></div></div><div class="points-table-wrap results-table-wrap"><table><thead><tr><th>Point</th><th>Moisture</th><th>pH</th><th>Condition</th></tr></thead><tbody id="resultsBody"><tr><td colspan="4" class="empty-row">No rover results yet.</td></tr></tbody></table></div></section>
+      <div class="soil-results-map" id="soilResultsMap" hidden><div id="soilMap"></div></div><div class="data-note"><i data-lucide="info"></i><span>Results shown here are measurements returned by the rover. Nutrient columns such as N/P/K are intentionally hidden from this interface; the raw JSON remains compatible with the existing rover format.</span></div>
+    </section>
+
+    <!-- GUIDE -->
+    <section class="app-page" id="guidePage">
+      <div class="page-heading"><div><span class="section-kicker">WORKFLOW</span><h1>How TerraGrid<br><em>works.</em></h1><p>A simple path from live location to field mission to soil intelligence.</p></div></div>
+      <div class="guide-timeline">
+        <article><span>01</span><i data-lucide="wifi"></i><div><b>Connect ESP32 to Wi-Fi</b><p>Connect the AgriBot ESP32 to the same network or access point the browser can reach.</p></div></article>
+        <article><span>02</span><i data-lucide="crosshair"></i><div><b>Find ESP32 local IP</b><p>Read the IP address printed by the ESP32 Serial Monitor.</p></div></article>
+        <article><span>03</span><i data-lucide="link"></i><div><b>Enter ESP32 endpoint</b><p>Enter the mission endpoint, for example <code>http://192.168.1.105/mission</code>.</p></div></article>
+        <article><span>04</span><i data-lucide="check-circle"></i><div><b>Test connection</b><p>Verify that the browser can reach the rover before sending a mission.</p></div></article>
+        <article><span>05</span><i data-lucide="pentagon"></i><div><b>Map the field</b><p>Draw the actual field boundary on satellite imagery.</p></div></article>
+        <article><span>06</span><i data-lucide="grid-3x3"></i><div><b>Generate waypoints</b><p>TerraGrid adapts the sampling density to the size of the field.</p></div></article>
+        <article><span>07</span><i data-lucide="send"></i><div><b>Dispatch AgriBot</b><p>Send the latitude and longitude waypoints to the ESP32 rover.</p></div></article>
+        <article><span>08</span><i data-lucide="layers-3"></i><div><b>Read soil results</b><p>Load the rover's measurements and inspect every sampling point.</p></div></article>
+      </div>
+    </section>
+  </main>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+
+<script src="app.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH1WMRwbqpieJ7nELhWdrXka7g-pRyBZI&libraries=geometry&callback=initMap"></script>
+</body>
+</html>
